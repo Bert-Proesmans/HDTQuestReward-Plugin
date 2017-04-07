@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
+using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
+
 namespace HDTQuestReward_Plugin
 {
     /// <summary>
@@ -31,32 +33,32 @@ namespace HDTQuestReward_Plugin
 
             this.DataContext = c;
 
-            UpdatePosition();
+            UpdateCustomWidget();
         }
 
         // Ripped from https://github.com/RedHatter/Graveyard/blob/master/src/Graveyard.cs#L35
-        internal void UpdatePosition()
+        internal void UpdateCustomWidget()
         {
-            var border = Hearthstone_Deck_Tracker.API.Core.OverlayCanvas.FindName("BorderStackPanelOpponent") as Border;
-            DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(Border)).AddValueChanged(border, Layout);
-            DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(Border)).AddValueChanged(border, Layout);
-            DependencyPropertyDescriptor.FromProperty(ActualWidthProperty, typeof(StackPanel)).AddValueChanged(this, Layout);
+            var border = CoreAPI.OverlayCanvas.FindName("StackPanelOpponent") as StackPanel;
+            DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(StackPanel)).AddValueChanged(border, Layout);
+            DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(StackPanel)).AddValueChanged(border, Layout);
+            DependencyPropertyDescriptor.FromProperty(ActualWidthProperty, typeof(UserControl)).AddValueChanged(this, Layout);
         }
 
         // Remove all event handlers when this component is disposed..
         public void Dispose()
         {
-            var border = Hearthstone_Deck_Tracker.API.Core.OverlayCanvas.FindName("BorderStackPanelOpponent") as Border;
-            DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(Border)).RemoveValueChanged(border, Layout);
-            DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(Border)).RemoveValueChanged(border, Layout);
-            DependencyPropertyDescriptor.FromProperty(ActualWidthProperty, typeof(StackPanel)).RemoveValueChanged(this, Layout);
+            var border = CoreAPI.OverlayCanvas.FindName("StackPanelOpponent") as StackPanel;
+            DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(StackPanel)).RemoveValueChanged(border, Layout);
+            DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(StackPanel)).RemoveValueChanged(border, Layout);
+            DependencyPropertyDescriptor.FromProperty(ActualWidthProperty, typeof(UserControl)).RemoveValueChanged(this, Layout);
         }
 
         private void Layout(object obj, EventArgs e)
         {
-            var border = Hearthstone_Deck_Tracker.API.Core.OverlayCanvas.FindName("BorderStackPanelOpponent") as Border;
+            var border = CoreAPI.OverlayCanvas.FindName("StackPanelOpponent") as StackPanel;
             Canvas.SetLeft(this, Canvas.GetLeft(border) + border.ActualWidth * Config.Instance.OverlayOpponentScaling / 100 + 10);
-            Canvas.SetTop(this, Canvas.GetTop(border) + border.ActualHeight);
+            Canvas.SetTop(this, Canvas.GetTop(border) + border.ActualHeight * Config.Instance.OverlayOpponentScaling / 100 + 10);
         }
 
         internal void Hide()
