@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="HDTQuestReward_Plugin.CardRewardCanvas"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HDTQuestReward_Plugin"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="300">
+    <!-- Register converters on the wrapping object -->
+    <UserControl.Resources>
+        <local:IDToImageConverter x:Key="IDToImageConverter" />
+    </UserControl.Resources>
+    <!-- Dockpanel automatically expands the last content element to fit the entire estate -->
+    <DockPanel>
+        <!-- Width and Height properties should be set by the image source -->
+        <Image x:Name="image" Source="{Binding Id, Converter={StaticResource IDToImageConverter}}" Width="256"/>
+    </DockPanel>
+</UserControl>
